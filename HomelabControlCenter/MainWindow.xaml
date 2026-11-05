@@ -294,6 +294,7 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                                     <TextBlock x:Name="TxtOrbitStatus" Text="Niepołączono" Foreground="#8A94A6" VerticalAlignment="Center" Margin="0,0,15,0"/>
+                                    <ui:Button Content="Panel web ↗" Appearance="Secondary" Click="OrbitOpenWeb_Click" Padding="12,7" Margin="0,0,8,0"/>
                                     <ui:Button Content="Połącz i odśwież" Appearance="Primary" Background="#FF5500" BorderBrush="#FF5500" Click="BtnOrbitConnect_Click" Padding="14,8"/>
                                 </StackPanel>
                             </DockPanel>
@@ -316,8 +317,10 @@
                                                         </StackPanel>
                                                         <TextBlock Text="{Binding Image}" Foreground="#8A94A6" FontSize="11" Margin="17,3,0,0"/>
                                                         <TextBlock Text="{Binding Status}" Foreground="#00A3FF" FontSize="11" Margin="17,3,0,0"/>
+                                                        <TextBlock Text="{Binding PortsSummary}" Foreground="#8A94A6" FontSize="11" Margin="17,3,0,0"/>
                                                     </StackPanel>
                                                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                                        <ui:Button Content="Otwórz usługę ↗" Appearance="Secondary" Click="OrbitOpenContainer_Click" Tag="{Binding WebUrl}" IsEnabled="{Binding HasWebUrl}" Padding="10,5" Margin="0,0,6,0"/>
                                                         <ui:Button Content="Uruchom" Appearance="Secondary" Click="OrbitStart_Click" Tag="{Binding Id}" Padding="10,5" Margin="0,0,6,0"/>
                                                         <ui:Button Content="Zatrzymaj" Appearance="Secondary" Click="OrbitStop_Click" Tag="{Binding Id}" Padding="10,5" Margin="0,0,6,0"/>
                                                         <ui:Button Content="Restart" Appearance="Secondary" Click="OrbitRestart_Click" Tag="{Binding Id}" Padding="10,5"/>

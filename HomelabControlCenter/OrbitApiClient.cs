@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace HomelabControlCenter
 {
@@ -16,9 +17,15 @@ namespace HomelabControlCenter
         private string _baseUrl = "http://localhost:5001";
         private string _token = string.Empty;
 
+        public string BaseUrl => _baseUrl;
+
         public void Configure(string baseUrl)
         {
-            _baseUrl = baseUrl.Trim().TrimEnd('/');
+            var candidate = baseUrl.Trim().TrimEnd('/');
+            if (!Uri.TryCreate(candidate, UriKind.Absolute, out var uri) ||
+                (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
+                throw new ArgumentException("Adres Orbit API musi zaczynać się od http:// albo https://.", nameof(baseUrl));
+            _baseUrl = candidate;
         }
 
         public async Task LoginAsync(string email, string password, CancellationToken cancellationToken = default)
@@ -116,6 +123,14 @@ namespace HomelabControlCenter
         public string Status { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
         public List<OrbitPort> Ports { get; set; } = new List<OrbitPort>();
+        [JsonIgnore]
+        public string PortsSummary => Ports.Count == 0
+            ? "Brak wystawionych portów"
+            : string.Join(", ", Ports.Select(port => port.Host ?? port.Container));
+        [JsonIgnore]
+        public string? WebUrl => Ports.FirstOrDefault(port => !string.IsNullOrWhiteSpace(port.Url))?.Url;
+        [JsonIgnore]
+        public bool HasWebUrl => !string.IsNullOrWhiteSpace(WebUrl);
     }
 
     public sealed class OrbitPort

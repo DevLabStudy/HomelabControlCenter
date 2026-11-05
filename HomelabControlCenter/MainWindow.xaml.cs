@@ -182,6 +182,37 @@ namespace HomelabControlCenter
             System.Windows.MessageBox.Show("Ustawienia aplikacji zostały pomyślnie zapisane!", "DevLab CC");
         }
 
+        private void OrbitOpenWeb_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _orbitApi.Configure(TxtOrbitApiUrl.Text);
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = _orbitApi.BaseUrl,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Nie udało się otworzyć panelu web: " + ex.Message, "Orbit");
+            }
+        }
+
+        private void OrbitOpenContainer_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not FrameworkElement element || element.Tag is not string url || string.IsNullOrWhiteSpace(url))
+                return;
+            try
+            {
+                Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Nie udało się otworzyć usługi: " + ex.Message, "Orbit");
+            }
+        }
+
         private async void BtnOrbitConnect_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(TxtOrbitApiUrl.Text) ||
