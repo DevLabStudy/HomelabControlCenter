@@ -31,8 +31,10 @@ namespace HomelabControlCenter
     public partial class MainWindow : FluentWindow
     {
         public ObservableCollection<ServerNode> Servers { get; set; }
+        public ObservableCollection<OrbitContainer> OrbitContainers { get; } = new ObservableCollection<OrbitContainer>();
         private ServerNode? _selectedServer;
         private SshClient? _sshClient;
+        private readonly OrbitApiClient _orbitApi = new OrbitApiClient();
         private string _currentMobileAuthToken = "DEVLAB_AUTH_DEFAULT_000000";
 
         public MainWindow()
@@ -42,6 +44,7 @@ namespace HomelabControlCenter
 
             Servers = new ObservableCollection<ServerNode>();
             ServerItemsControl.ItemsSource = Servers;
+            OrbitContainersControl.ItemsSource = OrbitContainers;
 
             GenerateNewAuthToken();
         }
@@ -175,7 +178,65 @@ namespace HomelabControlCenter
 
         private void BtnSaveSettings_Click(object sender, RoutedEventArgs e)
         {
+            _orbitApi.Configure(TxtOrbitApiUrl.Text);
             System.Windows.MessageBox.Show("Ustawienia aplikacji zostały pomyślnie zapisane!", "DevLab CC");
+        }
+
+        private async void BtnOrbitConnect_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(TxtOrbitApiUrl.Text) ||
+                string.IsNullOrWhiteSpace(TxtOrbitEmail.Text) ||
+                string.IsNullOrWhiteSpace(TxtOrbitPassword.Password))
+            {
+                System.Windows.MessageBox.Show("Uzupełnij adres Orbit API, email i hasło.", "Orbit");
+                return;
+            }
+
+            try
+            {
+                TxtOrbitStatus.Text = "Łączenie...";
+                _orbitApi.Configure(TxtOrbitApiUrl.Text);
+                await _orbitApi.LoginAsync(TxtOrbitEmail.Text.Trim(), TxtOrbitPassword.Password);
+                await RefreshOrbitContainersAsync();
+                TxtOrbitStatus.Text = $"Połączono • {OrbitContainers.Count} kont.";
+            }
+            catch (Exception ex)
+            {
+                TxtOrbitStatus.Text = "Błąd połączenia";
+                System.Windows.MessageBox.Show(ex.Message, "Orbit API");
+            }
+        }
+
+        private async Task RefreshOrbitContainersAsync()
+        {
+            var containers = await _orbitApi.GetContainersAsync();
+            OrbitContainers.Clear();
+            foreach (var container in containers)
+                OrbitContainers.Add(container);
+        }
+
+        private async void OrbitStart_Click(object sender, RoutedEventArgs e) =>
+            await ExecuteOrbitActionAsync(sender, "start");
+
+        private async void OrbitStop_Click(object sender, RoutedEventArgs e) =>
+            await ExecuteOrbitActionAsync(sender, "stop");
+
+        private async void OrbitRestart_Click(object sender, RoutedEventArgs e) =>
+            await ExecuteOrbitActionAsync(sender, "restart");
+
+        private async Task ExecuteOrbitActionAsync(object sender, string action)
+        {
+            if (sender is not FrameworkElement element || element.Tag is not string id) return;
+            try
+            {
+                await _orbitApi.ExecuteContainerActionAsync(id, action);
+                await RefreshOrbitContainersAsync();
+                TxtOrbitStatus.Text = $"Połączono • {OrbitContainers.Count} kont.";
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message, "Orbit API");
+            }
         }
 
         private void BtnGenerateQr_Click(object sender, RoutedEventArgs e)
