@@ -1,0 +1,413 @@
+﻿<ui:FluentWindow x:Class="HomelabControlCenter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        Title="DEVLABSTUDY // Homelab Control Center" Height="880" Width="1400"
+        Icon="devlab_icon.ico"
+        WindowStartupLocation="CenterScreen"
+        ExtendsContentIntoTitleBar="True"
+        WindowBackdropType="Mica"
+        Loaded="MainWindow_Loaded">
+
+    <Grid Background="#06090E">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Grid.Row="0" Title="DEVLABSTUDY // Homelab Control Center" Icon="devlab_icon.ico" Foreground="White"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Boczny Panel Nawigacji -->
+            <Border Grid.Column="0" Background="#04060A" BorderBrush="#121926" BorderThickness="0,0,1,0">
+                <DockPanel Margin="14,15,14,15">
+                    <StackPanel DockPanel.Dock="Top">
+                        <StackPanel Orientation="Horizontal" Margin="8,0,0,25" Cursor="Hand" MouseDown="OpenDevLabWeb_Click">
+                            <TextBlock Text=">_" Foreground="#FF5500" FontSize="22" FontWeight="Black" Margin="0,0,8,0"/>
+                            <TextBlock Text="DEVLABSTUDY" Foreground="White" FontSize="18" FontWeight="Black" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <ui:Button x:Name="BtnNavDashboard" Content="Infrastruktura" Margin="0,0,0,8" HorizontalAlignment="Stretch" Appearance="Primary" Background="#FF5500" BorderBrush="#FF5500" Foreground="White" Click="BtnNavDashboard_Click">
+                            <ui:Button.Icon>
+                                <ui:SymbolIcon Symbol="Server24"/>
+                            </ui:Button.Icon>
+                        </ui:Button>
+
+                        <ui:Button x:Name="BtnNavTools" Content="Narzędzia Sieciowe" Margin="0,0,0,8" HorizontalAlignment="Stretch" Appearance="Secondary" Background="#04060A" Foreground="#8A94A6" Click="BtnNavTools_Click">
+                            <ui:Button.Icon>
+                                <ui:SymbolIcon Symbol="Wrench24"/>
+                            </ui:Button.Icon>
+                        </ui:Button>
+
+                        <ui:Button x:Name="BtnNavDocker" Content="Docker i Kontenery" Margin="0,0,0,8" HorizontalAlignment="Stretch" Appearance="Secondary" Background="#04060A" Foreground="#8A94A6" Click="BtnNavDocker_Click">
+                            <ui:Button.Icon>
+                                <ui:SymbolIcon Symbol="Cube24"/>
+                            </ui:Button.Icon>
+                        </ui:Button>
+
+                        <ui:Button x:Name="BtnNavDiagnostics" Content="Diagnostyka PC" Margin="0,0,0,8" HorizontalAlignment="Stretch" Appearance="Secondary" Background="#04060A" Foreground="#8A94A6" Click="BtnNavDiagnostics_Click">
+                            <ui:Button.Icon>
+                                <ui:SymbolIcon Symbol="Info24"/>
+                            </ui:Button.Icon>
+                        </ui:Button>
+
+                        <ui:Button x:Name="BtnNavContact" Content="Kontakt i Projekt" Margin="0,0,0,8" HorizontalAlignment="Stretch" Appearance="Secondary" Background="#04060A" Foreground="#8A94A6" Click="BtnNavContact_Click">
+                            <ui:Button.Icon>
+                                <ui:SymbolIcon Symbol="ContactCard24"/>
+                            </ui:Button.Icon>
+                        </ui:Button>
+                    </StackPanel>
+
+                    <DockPanel DockPanel.Dock="Bottom" Margin="4,0,4,5">
+                        <ui:Button x:Name="BtnReportBug" ToolTip="Zgłoś błąd / Support" Appearance="Secondary" Click="BtnReportBug_Click" Width="42" Height="42" Padding="0">
+                            <ui:Button.Icon>
+                                <ui:SymbolIcon Symbol="Warning24" Foreground="#FF5500"/>
+                            </ui:Button.Icon>
+                        </ui:Button>
+
+                        <ui:Button x:Name="BtnNavSettings" ToolTip="Ustawienia i Parowanie QR" Appearance="Secondary" Click="BtnNavSettings_Click" Width="42" Height="42" Padding="0" HorizontalAlignment="Right">
+                            <ui:Button.Icon>
+                                <ui:SymbolIcon Symbol="Settings24"/>
+                            </ui:Button.Icon>
+                        </ui:Button>
+                    </DockPanel>
+                </DockPanel>
+            </Border>
+
+            <!-- Główny Obszar Roboczy -->
+            <Grid Grid.Column="1" Margin="30,20,30,25">
+
+                <!-- WIDOK 1: INFRASTRUKTURA -->
+                <Grid x:Name="ViewDashboard" Visibility="Visible">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="#0A0F18" BorderBrush="#162032" BorderThickness="1" CornerRadius="12" Padding="20" Margin="0,0,0,20">
+                        <DockPanel>
+                            <StackPanel DockPanel.Dock="Left">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="/// " Foreground="#FF5500" FontSize="14" FontWeight="Bold"/>
+                                    <TextBlock Text="INFRASTRUKTURA &amp; WĘZŁY" Foreground="#FF5500" FontSize="13" FontWeight="Bold"/>
+                                </StackPanel>
+                                <TextBlock Text="Zarządzanie serwerami i węzłami homelabu" Foreground="White" FontSize="24" FontWeight="Black" Margin="0,4,0,0"/>
+                            </StackPanel>
+                            <ui:Button Content="+ Dodaj Serwer" HorizontalAlignment="Right" Appearance="Primary" Background="#FF5500" BorderBrush="#FF5500" Click="BtnAddServer_Click" Padding="18,10"/>
+                        </DockPanel>
+                    </Border>
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl x:Name="ServerItemsControl">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Width="320" Background="#0A0F18" BorderBrush="#162032" BorderThickness="1" CornerRadius="10" Margin="0,0,15,15" Padding="18" Cursor="Hand" MouseDown="ServerCard_MouseDown">
+                                        <StackPanel>
+                                            <DockPanel Margin="0,0,0,12">
+                                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                                                    <Ellipse Width="12" Height="12" Fill="{Binding StatusColor}" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Name}" Foreground="White" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                                <TextBlock Text="{Binding IpAddress}" Foreground="#00A3FF" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                            </DockPanel>
+
+                                            <Border Height="1" Background="#162032" Margin="0,0,0,12"/>
+
+                                            <StackPanel Margin="0,0,0,15">
+                                                <DockPanel Margin="0,0,0,5">
+                                                    <TextBlock Text="Użytkownik SSH:" Foreground="#8A94A6" FontSize="12"/>
+                                                    <TextBlock Text="{Binding Username}" Foreground="White" FontSize="12" HorizontalAlignment="Right"/>
+                                                </DockPanel>
+                                                <DockPanel Margin="0,0,0,5">
+                                                    <TextBlock Text="Hasło w pamięci:" Foreground="#8A94A6" FontSize="12"/>
+                                                    <TextBlock Text="{Binding HasSavedPasswordText}" Foreground="#00A3FF" FontSize="12" HorizontalAlignment="Right"/>
+                                                </DockPanel>
+                                            </StackPanel>
+
+                                            <Border Background="#101726" CornerRadius="6" Padding="10,8">
+                                                <DockPanel>
+                                                    <TextBlock Text="Status: Gotowy do połączenia" Foreground="#8A94A6" FontSize="11" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="Terminal ➔" Foreground="#FF5500" FontSize="12" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                                </DockPanel>
+                                            </Border>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+
+                <!-- WIDOK 2: TERMINAL SSH -->
+                <Grid x:Name="ViewServerDetails" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <DockPanel Grid.Row="0" Margin="0,0,0,15">
+                        <ui:Button Content="← Powrót do listy" Appearance="Secondary" Click="BtnBackToDashboard_Click" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock x:Name="TxtSelectedServerName" Text="Proxmox VE" Foreground="White" FontSize="22" FontWeight="Bold"/>
+                            <TextBlock x:Name="TxtSelectedServerIp" Text="IP: 192.168.1.100" Foreground="#00A3FF" FontSize="13"/>
+                        </StackPanel>
+                    </DockPanel>
+
+                    <Border Grid.Row="1" Background="#0A0F18" BorderBrush="#162032" BorderThickness="1" CornerRadius="10" Padding="12" Margin="0,0,0,15">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Narzędzia diagnostyczne węzła: " Foreground="#8A94A6" VerticalAlignment="Center" FontSize="12" Margin="5,0,12,0"/>
+                            <ui:Button Content="Ping Test" Margin="0,0,8,0" Padding="12,5" Appearance="Secondary" Click="BtnToolPing_Click"/>
+                            <ui:Button Content="Traceroute" Margin="0,0,8,0" Padding="12,5" Appearance="Secondary" Click="BtnToolTraceroute_Click"/>
+                            <ui:Button Content="iPerf3 Test" Margin="0,0,8,0" Padding="12,5" Appearance="Secondary" Click="BtnToolIperf_Click"/>
+                            <ui:Button Content="Disk I/O" Margin="0,0,8,0" Padding="12,5" Appearance="Secondary" Click="BtnToolDiskIo_Click"/>
+                            <ui:Button Content="HTOP" Margin="0,0,8,0" Padding="12,5" Appearance="Secondary" Click="BtnToolHtop_Click"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="2" Background="#030508" BorderBrush="#162032" BorderThickness="1" CornerRadius="10" Padding="15">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <DockPanel Grid.Row="0" Margin="0,0,0,12">
+                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                                    <TextBlock Text="TERMINAL SSH LIVE" Foreground="#00A3FF" FontSize="12" FontWeight="Bold"/>
+                                    <TextBlock x:Name="TxtTerminalStatus" Text=" [Rozłączony]" Foreground="#8A94A6" FontSize="12" Margin="10,0,0,0"/>
+                                </StackPanel>
+                                <ui:Button Content="Połącz SSH" HorizontalAlignment="Right" Appearance="Primary" Background="#FF5500" BorderBrush="#FF5500" Click="BtnConnectSsh_Click" Padding="14,5"/>
+                            </DockPanel>
+
+                            <TextBox x:Name="TxtTerminalOutput" Grid.Row="1" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" Background="Transparent" Foreground="#FF5500" FontFamily="Consolas" FontSize="13" BorderThickness="0" Text="[Kliknij 'Połącz SSH' lub wybierz narzędzie powyżej]&#10;" VerticalScrollBarVisibility="Auto"/>
+
+                            <Grid Grid.Row="2" Margin="0,12,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="root@node:~# " Foreground="#00A3FF" FontFamily="Consolas" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBox x:Name="TxtCommandInput" Grid.Column="1" Background="#0A0F18" Foreground="White" FontFamily="Consolas" Padding="8,6" KeyDown="TxtCommandInput_KeyDown"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- WIDOK 3: NARZĘDZIA SIECIOWE -->
+                <Grid x:Name="ViewTools" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="#0A0F18" BorderBrush="#162032" BorderThickness="1" CornerRadius="12" Padding="20" Margin="0,0,0,15">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="/// " Foreground="#FF5500" FontSize="14" FontWeight="Bold"/>
+                                <TextBlock Text="ZAAWANSOWANE NARZĘDZIA SIECIOWE" Foreground="#FF5500" FontSize="13" FontWeight="Bold"/>
+                            </StackPanel>
+                            <TextBlock Text="Automatyczne wykrywanie LAN, Ping Sweep, Porty TCP &amp; DNS Lookup" Foreground="White" FontSize="22" FontWeight="Bold" Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="1" Background="#0A0F18" BorderBrush="#162032" BorderThickness="1" CornerRadius="10" Padding="15" Margin="0,0,0,15">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="180"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="220"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="Podsieć LAN:" Foreground="#8A94A6" VerticalAlignment="Center" FontSize="12"/>
+                                <TextBox x:Name="TxtScanSubnet" Grid.Column="1" Text="" ToolTip="Format: 192.168.1.0/24" Background="#101726" Foreground="White" Padding="8,6" VerticalAlignment="Center"/>
+
+                                <TextBlock Text="Porty:" Grid.Column="3" Foreground="#8A94A6" VerticalAlignment="Center" FontSize="12"/>
+                                <TextBox x:Name="TxtScanPorts" Grid.Column="4" Text="22, 80, 443, 8006, 3389" Background="#101726" Foreground="White" Padding="8,6" VerticalAlignment="Center"/>
+
+                                <StackPanel Grid.Column="5" Margin="15,0,15,0" VerticalAlignment="Center">
+                                    <TextBlock x:Name="TxtDetectedNetwork" Text="Wykrywanie aktywnej sieci..." Foreground="#00A3FF" FontSize="11"/>
+                                    <TextBlock Text="Skanuj tylko sieć lokalną, do której jesteś podłączony" Foreground="#6F7B8F" FontSize="10"/>
+                                </StackPanel>
+
+                                <ui:Button x:Name="BtnStartNetworkScan" Content="Skanuj Podsieć" Grid.Column="6" Appearance="Primary" Background="#FF5500" BorderBrush="#FF5500" Click="BtnStartNetworkScan_Click" Padding="16,6"/>
+                            </Grid>
+
+                            <Border Height="1" Background="#162032" Margin="0,0,0,12"/>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Testy hosta:" Foreground="#8A94A6" VerticalAlignment="Center" FontSize="12" Margin="0,0,12,0"/>
+                                <ui:Button Content="Multi-Ping (10x)" Margin="0,0,8,0" Padding="12,5" Appearance="Secondary" Click="BtnToolMultiPing_Click"/>
+                                <ui:Button Content="Skan Portów TCP" Margin="0,0,8,0" Padding="12,5" Appearance="Secondary" Click="BtnToolTcpPortScan_Click"/>
+                                <ui:Button Content="DNS Lookup" Margin="0,0,8,0" Padding="12,5" Appearance="Secondary" Click="BtnToolDnsLookup_Click"/>
+                                <ui:Button Content="Wyczyść Wyniki" Margin="25,0,0,0" Padding="12,5" Appearance="Secondary" Click="BtnClearToolOutput_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="2" Background="#030508" BorderBrush="#162032" BorderThickness="1" CornerRadius="10" Padding="15">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <DockPanel Grid.Row="0" Margin="0,0,0,10">
+                                <TextBlock Text="KONSOLA WYNIKÓW" Foreground="#00A3FF" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="TxtScanProgress" Text="[Gotowy]" Foreground="#8A94A6" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </DockPanel>
+                            <TextBox x:Name="TxtNetworkScanOutput" Grid.Row="1" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" Background="Transparent" Foreground="#FF5500" FontFamily="Consolas" FontSize="13" BorderThickness="0" VerticalScrollBarVisibility="Auto" Text="Wybierz narzędzie lub uruchom skaner podsieci...&#10;"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- WIDOK 4: DOCKER -->
+                <Grid x:Name="ViewDocker" Visibility="Collapsed">
+                    <Border Background="#0A0F18" BorderBrush="#162032" BorderThickness="1" CornerRadius="12" Padding="35" HorizontalAlignment="Center" VerticalAlignment="Center" Width="600">
+                        <StackPanel>
+                            <TextBlock Text="🐳" FontSize="56" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+                            <TextBlock Text="Moduł Kontenerów Docker" Foreground="White" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Zarządzaj usługami, kontenerami i stackami na swoich węzłach w sekcji Infrastruktura po połączeniu SSH." Foreground="#8A94A6" FontSize="13" TextAlignment="Center" TextWrapping="Wrap" Margin="0,8,0,25"/>
+                            <ui:Button Content="Przejdź do Infrastruktury" Appearance="Primary" Background="#FF5500" BorderBrush="#FF5500" Click="BtnNavDashboard_Click" HorizontalAlignment="Center" Padding="20,10"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- WIDOK 5: DIAGNOSTYKA PC -->
+                <Grid x:Name="ViewDiagnostics" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="#0A0F18" BorderBrush="#162032" BorderThickness="1" CornerRadius="12" Padding="20" Margin="0,0,0,15">
+                        <DockPanel>
+                            <StackPanel DockPanel.Dock="Left">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="/// " Foreground="#FF5500" FontSize="14" FontWeight="Bold"/>
+                                    <TextBlock Text="SZCZEGÓŁOWY RAPORT DIAGNOSTYCZNY (AIDA STYLE)" Foreground="#FF5500" FontSize="13" FontWeight="Bold"/>
+                                </StackPanel>
+                                <TextBlock Text="Pełna inwentaryzacja podzespołów przez WMI z numeracją Lp." Foreground="White" FontSize="22" FontWeight="Bold" Margin="0,4,0,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <ui:Button x:Name="BtnRunSystemDiagnostics" Content="Skanuj Komputer" Appearance="Primary" Background="#FF5500" BorderBrush="#FF5500" Click="BtnRunSystemDiagnostics_Click" Margin="0,0,10,0" Padding="16,8"/>
+                                <ui:Button Content="Kopiuj do Schowka" Appearance="Secondary" Click="BtnCopyDiagnostics_Click" Padding="16,8"/>
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+
+                    <Border Grid.Row="2" Background="#030508" BorderBrush="#162032" BorderThickness="1" CornerRadius="10" Padding="15">
+                        <TextBox x:Name="TxtDiagnosticsOutput" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" Background="Transparent" Foreground="#00A3FF" FontFamily="Consolas" FontSize="12" BorderThickness="0" VerticalScrollBarVisibility="Auto" Text="[Kliknij 'Skanuj Komputer', aby pobrać pełny raport sprzętu, systemu, dysków i sieci.]&#10;"/>
+                    </Border>
+                </Grid>
+
+                <!-- WIDOK 6: USTAWIENIA & PAROWANIE QR -->
+                <Grid x:Name="ViewSettings" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="#0A0F18" BorderBrush="#162032" BorderThickness="1" CornerRadius="12" Padding="20" Margin="0,0,0,20">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="/// " Foreground="#FF5500" FontSize="14" FontWeight="Bold"/>
+                                <TextBlock Text="USTAWIENIA APLIKACJI &amp; PAROWANIE MOBILE" Foreground="#FF5500" FontSize="13" FontWeight="Bold"/>
+                            </StackPanel>
+                            <TextBlock Text="Konfiguracja centrum sterowania oraz uwierzytelnianie QR dla aplikacji w telefonie" Foreground="White" FontSize="22" FontWeight="Bold" Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <WrapPanel Orientation="Horizontal">
+                            <!-- Kafel ustawień ogólnych -->
+                            <Border Width="420" Background="#0A0F18" BorderBrush="#162032" BorderThickness="1" CornerRadius="10" Padding="20" Margin="0,0,20,20">
+                                <StackPanel>
+                                    <TextBlock Text="Ustawienia Ogólne" Foreground="White" FontSize="16" FontWeight="Bold" Margin="0,0,0,15"/>
+                                    
+                                    <TextBlock Text="Motyw aplikacji:" Foreground="#8A94A6" FontSize="12" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="CmbAppTheme" SelectedIndex="0" HorizontalAlignment="Stretch" Margin="0,0,0,15" SelectionChanged="CmbAppTheme_SelectionChanged">
+                                        <ComboBoxItem Content="Ciemny (Dark / Mica / DevLab Accent)"/>
+                                        <ComboBoxItem Content="Jasny (Light Mode)"/>
+                                        <ComboBoxItem Content="Systemowy (Windows Default)"/>
+                                    </ComboBox>
+
+                                    <TextBlock Text="Domyślny timeout SSH (sekundy):" Foreground="#8A94A6" FontSize="12" Margin="0,0,0,5"/>
+                                    <TextBox Text="15" Background="#101726" Foreground="White" Padding="10,6" Margin="0,0,0,20" BorderBrush="#162032"/>
+                                    
+                                    <ui:Button Content="Zapisz Ustawienia" Appearance="Primary" Background="#FF5500" BorderBrush="#FF5500" HorizontalAlignment="Stretch" Padding="0,10" Click="BtnSaveSettings_Click"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Kafel Parowania QR / Mobilnego -->
+                            <Border Width="500" Background="#0A0F18" BorderBrush="#162032" BorderThickness="1" CornerRadius="10" Padding="20" Margin="0,0,20,20">
+                                <StackPanel>
+                                    <TextBlock Text="Uwierzytelnianie i Parowanie Aplikacji Mobilnej" Foreground="White" FontSize="16" FontWeight="Bold" Margin="0,0,0,8"/>
+                                    <TextBlock Text="Zeskanuj poniższy, w pełni wygenerowany kod QR w aplikacji mobilnej DevLab, aby autoryzować bezpieczny tunel z tym komputerem." Foreground="#8A94A6" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,15"/>
+
+                                    <Border Background="White" BorderBrush="#162032" BorderThickness="1" CornerRadius="8" Padding="15" HorizontalAlignment="Center" Margin="0,0,0,12">
+                                        <Canvas x:Name="QrCanvas" Width="180" Height="180" Background="White"/>
+                                    </Border>
+
+                                    <TextBlock x:Name="TxtQrTokenDisplay" Text="DEVLAB_AUTH_TOKEN..." Foreground="#00A3FF" FontSize="11" FontWeight="Bold" TextAlignment="Center" Margin="0,0,0,15"/>
+
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <ui:Button Content="Generuj Nowy Token" Appearance="Primary" Background="#FF5500" BorderBrush="#FF5500" Click="BtnGenerateQr_Click" Margin="0,0,10,0" Padding="14,8"/>
+                                        <ui:Button Content="Kopiuj Token" Appearance="Secondary" Click="BtnCopyQrToken_Click" Padding="14,8"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </WrapPanel>
+                    </ScrollViewer>
+                </Grid>
+
+                <!-- WIDOK 7: KONTAKT -->
+                <Grid x:Name="ViewContact" Visibility="Collapsed">
+                    <Border Background="#0A0F18" BorderBrush="#162032" BorderThickness="1" CornerRadius="12" Padding="30" HorizontalAlignment="Left" Width="600">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                <TextBlock Text="/// " Foreground="#FF5500" FontSize="16" FontWeight="Bold"/>
+                                <TextBlock Text="KONTAKT &amp; DEVLABSTUDY" Foreground="White" FontSize="18" FontWeight="Bold"/>
+                            </StackPanel>
+
+                            <TextBlock Text="Kliknij w adres e-mail, aby otworzyć domyślny klient poczty:" Foreground="#8A94A6" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,20"/>
+
+                            <StackPanel Margin="0,0,0,25">
+                                <TextBlock Text="Główny kontakt:" Foreground="#8A94A6" FontSize="11"/>
+                                <TextBox Text="devlabstudy@devlabstudy.ovh" IsReadOnly="True" Background="Transparent" BorderThickness="0" Foreground="#00A3FF" FontSize="14" FontWeight="SemiBold" Cursor="Hand" PreviewMouseDown="Email_Click" Margin="0,0,0,10"/>
+
+                                <TextBlock Text="Wsparcie techniczne:" Foreground="#8A94A6" FontSize="11"/>
+                                <TextBox Text="support@devlabstudy.ovh" IsReadOnly="True" Background="Transparent" BorderThickness="0" Foreground="#00A3FF" FontSize="14" FontWeight="SemiBold" Cursor="Hand" PreviewMouseDown="Email_Click" Margin="0,0,0,10"/>
+
+                                <TextBlock Text="Społeczność &amp; Widzowie:" Foreground="#8A94A6" FontSize="11"/>
+                                <TextBox Text="widzowie@devlabstudy.ovh" IsReadOnly="True" Background="Transparent" BorderThickness="0" Foreground="#00A3FF" FontSize="14" FontWeight="SemiBold" Cursor="Hand" PreviewMouseDown="Email_Click"/>
+                            </StackPanel>
+
+                            <Border Height="1" Background="#162032" Margin="0,0,0,20"/>
+                            <ui:Button Content="Przejdź na devlabstudy.ovh ↗" Appearance="Primary" Background="#FF5500" BorderBrush="#FF5500" HorizontalAlignment="Stretch" Click="OpenDevLabWeb_Click" Padding="0,12"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+            </Grid>
+        </Grid>
+    </Grid>
+</ui:FluentWindow>

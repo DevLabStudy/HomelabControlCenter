@@ -1,0 +1,38 @@
+{
+  "version": 2,
+  "dgSpecHash": "zkkjACS0lkw=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\tobia\\RiderProjects\\HomelabControlCenter\\HomelabControlCenter\\HomelabControlCenter.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\tobia\\.nuget\\packages\\bouncycastle.cryptography\\2.4.0\\bouncycastle.cryptography.2.4.0.nupkg.sha512",
+    "C:\\Users\\tobia\\.nuget\\packages\\ssh.net\\2024.2.0\\ssh.net.2024.2.0.nupkg.sha512",
+    "C:\\Users\\tobia\\.nuget\\packages\\system.management\\9.0.0\\system.management.9.0.0.nupkg.sha512",
+    "C:\\Users\\tobia\\.nuget\\packages\\wpf-ui\\3.0.5\\wpf-ui.3.0.5.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'SSH.NET' 2024.2.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-mggc-4xg6-vcxf",
+      "projectPath": "C:\\Users\\tobia\\RiderProjects\\HomelabControlCenter\\HomelabControlCenter\\HomelabControlCenter.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\tobia\\RiderProjects\\HomelabControlCenter\\HomelabControlCenter\\HomelabControlCenter.csproj",
+      "libraryId": "SSH.NET",
+      "targetGraphs": [
+        "net10.0-windows"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'SSH.NET' 2024.2.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-q939-rpr3-3284",
+      "projectPath": "C:\\Users\\tobia\\RiderProjects\\HomelabControlCenter\\HomelabControlCenter\\HomelabControlCenter.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\tobia\\RiderProjects\\HomelabControlCenter\\HomelabControlCenter\\HomelabControlCenter.csproj",
+      "libraryId": "SSH.NET",
+      "targetGraphs": [
+        "net10.0-windows"
+      ]
+    }
+  ]
+}

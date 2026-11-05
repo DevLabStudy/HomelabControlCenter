@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net10.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+        <ImplicitUsings>disable</ImplicitUsings> <!-- WYŁĄCZENIE AUTOMATYCZNYCH USINGS -->
+        <ApplicationIcon>devlab_icon.ico</ApplicationIcon>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Resource Include="devlab_icon.ico" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="SSH.NET" Version="2024.2.0" />
+        <PackageReference Include="System.Management" Version="9.0.0" />
+        <PackageReference Include="WPF-UI" Version="3.0.5" />
+    </ItemGroup>
+
+</Project>
